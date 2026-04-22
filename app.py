@@ -73,8 +73,8 @@ SCRIPT_METADATA = {
 }
 
 
-load_dotenv()
-API_KEY = os.getenv("GEMINI_API_KEY")
+#load_dotenv()
+#API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 st.markdown(
@@ -1440,6 +1440,15 @@ def main():
 
     with st.sidebar:
         st.markdown("## Configurações")
+        
+        # --- INÍCIO DA MUDANÇA: Campo para a chave ---
+        user_api_key = st.text_input(
+            "Sua Google API Key",
+            type="password",
+            help="Obtenha sua chave gratuita em https://aistudio.google.com/app/apikey"
+        )
+        # --- FIM DA MUDANÇA ---
+
         model_name = st.selectbox(
             "Modelo de embedding",
             options=["gemini-embedding-001", "gemini-embedding-2-preview"],
@@ -1458,12 +1467,14 @@ def main():
             "Para dimensões menores que 3072, o app normaliza os vetores."
         )
         st.write("---")
-        if not API_KEY:
-            st.error("GEMINI_API_KEY não encontrada.")
 
-    if not client:
-        st.error("Configure a variável `GEMINI_API_KEY` no ambiente para usar o app.")
+    # --- INÍCIO DA MUDANÇA: Validação e Cliente ---
+    if not user_api_key:
+        st.warning("👈 Por favor, insira sua Google API Key na barra lateral para liberar o laboratório.")
         st.stop()
+
+    client = get_client(user_api_key)
+    # --- FIM DA MUDANÇA ---
 
     tabs = st.tabs(
         [
