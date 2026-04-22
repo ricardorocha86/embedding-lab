@@ -1435,9 +1435,7 @@ taxa_acerto = (sample["NPS"] == sample["Classificação"]).mean()""",
         )
 
 
-def main():
-    client = get_client(API_KEY)
-
+def main(): 
     with st.sidebar:
         st.markdown("## Configurações")
         
